@@ -58,7 +58,6 @@ def pattern_filter(pattern: str = 'ing', next_coroutine=None) -> None:
         while True:
             token = (yield)
             if pattern in token:
-                print(f'Found: {token}')
                 if next_coroutine is not None:
                     next_coroutine.send(token)
     except GeneratorExit:
@@ -66,8 +65,24 @@ def pattern_filter(pattern: str = 'ing', next_coroutine=None) -> None:
 
 
 #%%
+def print_token(next_coroutine=None):
+    try:
+        while True:
+            token = (yield)
+            print(f'Found: {token}')
+            if next_coroutine is not None:
+                next_coroutine.send(token)
+    except GeneratorExit:
+        print('Print coroutine ended')
+
+
+#%%
+
 # Instantiating the coroutine
-pattern_filter_coroutine = pattern_filter()
+print_coroutine = print_token()
+print_coroutine.send(None)
+
+pattern_filter_coroutine = pattern_filter(next_coroutine=print_coroutine)
 pattern_filter_coroutine.__next__()
 
 # Creating the producer

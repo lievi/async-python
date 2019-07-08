@@ -11,6 +11,8 @@ yapf = "*"
 
 [packages]
 jupyter = "*"
+aiohttp = "*"
+aiofiles = "*"
 
 [requires]
 python_version = "3.7"
